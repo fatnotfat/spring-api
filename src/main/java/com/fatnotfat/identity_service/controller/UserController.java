@@ -2,6 +2,7 @@ package com.fatnotfat.identity_service.controller;
 
 import com.fatnotfat.identity_service.dto.request.UserCreationRequest;
 import com.fatnotfat.identity_service.dto.request.UserUpdateRequest;
+import com.fatnotfat.identity_service.dto.response.APIResponse;
 import com.fatnotfat.identity_service.entity.User;
 import com.fatnotfat.identity_service.service.UserService;
 import jakarta.validation.Valid;
@@ -23,24 +24,39 @@ public class UserController {
     }
 
     @GetMapping({"/{userId}"})
-    public User getUserById(@PathVariable("userId") String userId) {
-        return userService.getUserById(userId);
+    public APIResponse<User> getUserById(@PathVariable("userId") String userId) {
+        APIResponse<User> response = new APIResponse<>();
+        response.setCode(200);
+        response.setMessage("Get successfully!");
+        response.setResult(userService.getUserById(userId));
+        return response;
     }
 
     @PostMapping()
-    public User createUser(@RequestBody @Valid UserCreationRequest user) {
-        return userService.createUserRequest(user);
+    public APIResponse<User> createUser(@RequestBody @Valid UserCreationRequest user) {
+        APIResponse<User> response = new APIResponse<>();
+        response.setCode(200);
+        response.setMessage("Create successfully!");
+        response.setResult(userService.createUserRequest(user));
+        return response;
     }
 
     @PutMapping({"/{userId}"})
-    public User updateUser(@RequestBody UserUpdateRequest request, @PathVariable("userId") String userId) {
-        return userService.updateUserRequest(userId, request);
+    public APIResponse<User> updateUser(@RequestBody UserUpdateRequest request, @PathVariable("userId") String userId) {
+        APIResponse<User> response = new APIResponse<>();
+        response.setCode(200);
+        response.setMessage("Update successfully!");
+        response.setResult(userService.updateUserRequest(userId, request));
+        return response;
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable("userId") String id) {
+    public APIResponse<User> deleteUser(@PathVariable("userId") String id) {
+        APIResponse<User> response = new APIResponse<>();
+        response.setCode(200);
+        response.setMessage("Delete successfully!");
         userService.deleteUserRequest(id);
-        return "User deleted";
+        return response;
     }
 
 }
