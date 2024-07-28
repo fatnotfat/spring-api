@@ -1,14 +1,16 @@
 package com.fatnotfat.identity_service.dto.request;
 
+import com.fatnotfat.identity_service.exception.ErrorCode;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class UserCreationRequest {
+    @Size(min = 3, message = "USERNAME_INVALID")
     private String username;
-    @Size(min = 8, message = "Password must at least 8 characters!")
-    @NotEmpty(message = "Password must not empty!")
+    @Size(min = 8, message = "PASSWORD_INVALID")
+    @NotEmpty(message = "PASSWORD_NULL")
     private String password;
     private String firstName;
     private String lastName;

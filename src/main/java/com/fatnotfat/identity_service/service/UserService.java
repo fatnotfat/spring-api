@@ -2,7 +2,11 @@ package com.fatnotfat.identity_service.service;
 
 import com.fatnotfat.identity_service.dto.request.UserCreationRequest;
 import com.fatnotfat.identity_service.dto.request.UserUpdateRequest;
+import com.fatnotfat.identity_service.dto.response.APIResponse;
 import com.fatnotfat.identity_service.entity.User;
+import com.fatnotfat.identity_service.exception.BadRequestException;
+import com.fatnotfat.identity_service.exception.ErrorCode;
+import com.fatnotfat.identity_service.exception.NotFoundException;
 import com.fatnotfat.identity_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +22,7 @@ public class UserService {
         User user = new User();
 
         if(userRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("Username already exists");
+            throw new BadRequestException(ErrorCode.USER_EXISTED);
         }
 
         user.setUsername(request.getUsername());
@@ -27,12 +31,13 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setDob(request.getDob());
 
-
-        return userRepository.save(user);
+        User userCreated = userRepository.save(user);
+        return userCreated;
     }
 
 
     public void deleteUserRequest(String id){
+        User user = getUserById(id);
         userRepository.deleteById(id);
     }
 
@@ -42,7 +47,7 @@ public class UserService {
     }
 
     public User getUserById(String id){
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOTFOUND));
     }
 
 
