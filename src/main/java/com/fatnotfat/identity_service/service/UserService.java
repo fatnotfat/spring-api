@@ -3,41 +3,41 @@ package com.fatnotfat.identity_service.service;
 import com.fatnotfat.identity_service.dto.request.UserCreationRequest;
 import com.fatnotfat.identity_service.dto.request.UserUpdateRequest;
 import com.fatnotfat.identity_service.dto.response.APIResponse;
+import com.fatnotfat.identity_service.dto.response.UserResponse;
 import com.fatnotfat.identity_service.entity.User;
 import com.fatnotfat.identity_service.exception.BadRequestException;
 import com.fatnotfat.identity_service.exception.ErrorCode;
 import com.fatnotfat.identity_service.exception.NotFoundException;
+import com.fatnotfat.identity_service.mapper.UserMapper;
 import com.fatnotfat.identity_service.repository.UserRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.mapstruct.BeanMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
+    UserMapper userMapper;
+
 
     public User createUserRequest(UserCreationRequest request){
-        User user = new User();
-
         if(userRepository.existsByUsername(request.getUsername())){
             throw new BadRequestException(ErrorCode.USER_EXISTED);
         }
-
-        user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setDob(request.getDob());
-
-        User userCreated = userRepository.save(user);
-        return userCreated;
+        User user = userMapper.toUser(request);
+        return userRepository.save(user);
     }
 
 
     public void deleteUserRequest(String id){
-        User user = getUserById(id);
+        UserResponse user = getUserById(id);
         userRepository.deleteById(id);
     }
 
@@ -46,17 +46,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(String id){
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOTFOUND));
+    public UserResponse getUserById(String id){
+        return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOTFOUND)));
     }
 
 
-    public User updateUserRequest(String id, UserUpdateRequest request){
-        User user = getUserById(id);
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setDob(request.getDob());
-        user.setPassword(request.getPassword());
-        return userRepository.save(user);
+    public UserResponse updateUserRequest(String id, UserUpdateRequest request){
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOTFOUND));
+        userMapper.updateUser(user, request);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 }

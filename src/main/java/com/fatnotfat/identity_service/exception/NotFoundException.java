@@ -1,5 +1,13 @@
 package com.fatnotfat.identity_service.exception;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.FieldDefaults;
+
+@EqualsAndHashCode(callSuper = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
 public class NotFoundException extends RuntimeException {
 
     public NotFoundException(ErrorCode errorCode) {
@@ -7,13 +15,5 @@ public class NotFoundException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    private ErrorCode errorCode;
-
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(ErrorCode errorCode) {
-        this.errorCode = errorCode;
-    }
+    ErrorCode errorCode;
 }
