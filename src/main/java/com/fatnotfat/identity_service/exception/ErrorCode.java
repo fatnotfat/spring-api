@@ -1,5 +1,12 @@
 package com.fatnotfat.identity_service.exception;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public enum ErrorCode {
 
     USER_EXISTED(400,"User existed!"),
@@ -15,14 +22,6 @@ public enum ErrorCode {
         this.message = message;
     }
 
-    private int code;
-    private String message;
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    final int code;
+    final String message;
 }

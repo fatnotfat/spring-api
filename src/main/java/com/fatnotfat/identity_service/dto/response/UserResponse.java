@@ -1,4 +1,4 @@
-package com.fatnotfat.identity_service.dto.request;
+package com.fatnotfat.identity_service.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class UserUpdateRequest {
-    String password;
+public class UserResponse {
+    String id;
+    String username;
     String firstName;
     String lastName;
     LocalDate dob;

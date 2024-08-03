@@ -1,58 +1,34 @@
 package com.fatnotfat.identity_service.dto.request;
 
-import com.fatnotfat.identity_service.exception.ErrorCode;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-
+//khoi tao getter setter thay vi phai tao manual
+@Data
+//end khoi tao getter setter
+//tao constructor voi so luong tham so truyen vao la tat ca va khong can truyen tham so nao vao
+@AllArgsConstructor
+@NoArgsConstructor
+//end tao tham so
+//annotation nay giup cho chung ta khong can phai goi gettter, setter thu cong nhu ban dau nua
+//ma thay vao do thi ta co the goi truc tiep cac field cua no ra de dung
+//VD: UserCreationRequest request = UserCreationRequest.builder().username("abc").build();
+@Builder
+//end khai bao builder
+//set mac dinh access level cho tung properties cua entity la pham vi truy cap nhu the nao
+//VD: private thi dung nhu ben duoi
+@FieldDefaults(level = AccessLevel.PRIVATE)
+//end khai bao access level
 public class UserCreationRequest {
     @Size(min = 3, message = "USERNAME_INVALID")
-    private String username;
+    String username;
     @Size(min = 8, message = "PASSWORD_INVALID")
     @NotEmpty(message = "PASSWORD_NULL")
-    private String password;
-    private String firstName;
-    private String lastName;
-    private LocalDate dob;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
+    String password;
+    String firstName;
+    String lastName;
+    LocalDate dob;
 }
